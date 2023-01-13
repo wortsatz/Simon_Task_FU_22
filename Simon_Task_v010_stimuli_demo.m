@@ -3,9 +3,9 @@
 %  _\ \_/ // /|_/ / /_/ /    /   / / / __ |_\ \/ ,<   
 % /___/___/_/  /_/\____/_/|_/   /_/ /_/ |_/___/_/|_|  
 %
-
+        
+%
 %% ======================== GETTING STARTED ===============================
-try % try and catch so that if an error occurs we go into debug mode
 
 % Clear the workspace
 close all;
@@ -19,21 +19,13 @@ Screen('Preference', 'SkipSyncTests', 1)
 % Participant ID - change it for everyone and use 0 for tests
 participantID = 1;
 
-%% STILL NEEDED
-% Number of Stimuli 
-
-% Stimulus Cutoff - 5 Sec
-
-% Interstimulus Interval - 500ms 
+%number of trials
+no_trials = 10; % 135 trials 
 
 %% ================= RANDOMIZATION AND TIMELINE ========================
-%number of stimuli, can be set earlier; needs to be divisible by 4 if we
-%want equal number of all types of stimuli, but the condition list will be
-%created even if it's not
-n=100;
-
 % We said that it is 50/50 Congruent and Incongruent and then within Incongruency there is 50/50 of left and right
-% the numbers of stimuli are rounded to integers, so all combinations of number of
+% we can also change it here by giving different percentages; the numbers
+% of stimuli are rounded to integers, so all combinations of number of
 % stimuli and percentages should work, but not all of them will be precise
 
 percentage_congruent=50; %frequency of congruent stimuli
@@ -45,8 +37,8 @@ percentage_L=50; %frequency of letter L
 
 %calculate how many stimuli of each type do we need
 
-number_congruent= round(n/(100/percentage_congruent));  %number of congruent stimuli
-number_incongruent= n-number_congruent; %number of congruent stimuli
+number_congruent= round(no_trials/(100/percentage_congruent));  %number of congruent stimuli
+number_incongruent= no_trials-number_congruent; %number of congruent stimuli
 
 number_L_congruent=round(number_congruent/(100/percentage_L)); %number of Ls congruent
 number_R_congruent= number_congruent-number_L_congruent; % number of congruent Rs
@@ -61,11 +53,7 @@ letters_order=[repmat(0,number_L_congruent,1); repmat(1,number_R_congruent,1); r
 
 condition_table_coded=congruent_order+letters_order; %list of balanced conditions
 
-condition_table= condition_table_coded(randperm(n)); %shuffles the balanced list to get random order of conditions
-
-%% STILL NEEDED
-% How many Stimuli can we place into 10 min? 
-% Should we do a timed Break of like 1 minute or should the participant decide when to start next with a keystroke?
+condition_table= condition_table_coded(randperm(no_trials)); %shuffles the balanced list to get random order of conditions
 
 %% ================= DATA LOG ========================
 % create a txt file 
@@ -83,203 +71,179 @@ PsychDefaultSetup(2);
 % Set the screen number to the external secondary monitor if there is one connected
 screenNumber = max(Screen('Screens'));
 
-% Open the screen
-
-%[window, windowRect] = PsychImaging('OpenWindow', screenNumber, gray, [], 32, 2,...
-%[], [],  kPsychNeed32BPCFloat);
-
-
-% Flip to clear
-%Screen('Flip', window);
-% Setup the text type for the window
-%Screen('TextSize', window, 40);
-
-%% ================= STIMULI CREATION ========================
-%preparing fixation cross
-FixCr=zeros(80,80);
-FixCr(36:45,:)=255;
-FixCr(:,36:45)=255;
-fixcross = Screen('MakeTexture',window,FixCr);
-
-%% Congruent Stimuli L
-% Fixation cross in the middle and then the correct Scrrens with L on the
-% left side
-%Fixation Cross
-% Screen('DrawTexture', window, fixcross,[],[mx-40,my-40,mx+40,my+40]); %show the fixation cross
-% Screen('Flip', window); %flip the screen
-% WaitSecs(.5); %cross is showing for .5 second
-
-%     DrawFormattedText(window, 'L', mx-400,'center',255); %places the L
-%     Screen('Flip', window);
-%     KbWait([], 2); %wait for the key press to continue, just for demo purposes
-
-%% Congruent Stimuli R
-% Fixation cross in the middle and then the correct Scren with R on
-% the right side 
-
-%Fixation Cross
-% Screen('DrawTexture', window, fixcross,[],[mx-40,my-40,mx+40,my+40]); %show the fixation cross
-% Screen('Flip', window); %flip the screen
-% WaitSecs(.5); %cross is showing for .5 second
-% 
-% %Letter R on left
-% Screen('TextSize', window, 150); %sets the font size
-% DrawFormattedText(window, 'R', mx+300,'center',255); %places the R
-% Screen('Flip', window);
-% KbWait([], 2); %wait for the key press to continue, just for demo purposes
-
-
-%% Incongruent Stimuli L
-% Fixation cross in the middle and then the correct Scrrens with L
-% the right side 
-
-%Fixation Cross
-% Screen('DrawTexture', window, fixcross,[],[mx-40,my-40,mx+40,my+40]); %show the fixation cross
-% Screen('Flip', window); %flip the screen
-% WaitSecs(.5); %cross is showing for .5 second
-% 
-% %Letter L on left
-% Screen('TextSize', window, 150); %sets the font size
-% DrawFormattedText(window, 'L', mx+300,'center',255); %places the R
-% Screen('Flip', window);
-% KbWait([], 2); %wait for the key press to continue, just for demo purposes
-
-%% Incongruent Stimuli L
-
-% Fixation cross in the middle and then the correct Scrrens with R
-% the left side 
-
-%Fixation Cross
-% Screen('DrawTexture', window, fixcross,[],[mx-40,my-40,mx+40,my+40]); %show the fixation cross
-% Screen('Flip', window); %flip the screen
-% WaitSecs(.5); %cross is showing for .5 second
-% 
-% %Letter L on left
-% Screen('TextSize', window, 150); %sets the font size
-% DrawFormattedText(window, 'R', mx-400,'center',255); %places the R
-% Screen('Flip', window);
-% KbWait([], 2); %wait for the key press to continue, just for demo purposes
-
-% sca; %close the demo 
-
-%% Error Screen
-
-% Intermediate Screen when the Participant chose wrong
-
-% How long should this be present
-
-%% Delay Screen
-
-% Intermediate Screen when the Participant takes longer than 5s to decide
-% that they should speed up
-
-% How long should this screen be present? 
-% Does it just immediately go on or does it need a Keystroke to Continue?
-
 %% ================= PREPARE WELCOME SCREEN AND INSTRUCTIONS ========================
 % Welcome Screen Text
 hello = 'Hello, welcome to the experiment!'
 next = 'Please press any key on the keyboard to continue.'
 
 % Explanation Screen Text
-expl_1 = "In the following experiment, you will be shown a fixation cross followed by either the letter L or the letter R."
-expl_2 = "The letter will be shown either on the left or the right side of the screen."
-expl_3 = "When you see the letter L, please press the left arrow key on the keyboard, regardless of its position on the screen."
-expl_4 = "When you see the letter R, please press the right arrow key on the keyboard, regardless of its position on the screen."
+expl_1 = 'In the following experiment, you will be shown a fixation cross followed by either the letter L or the letter R.'
+expl_2 = 'The letter will be shown either on the left or the right side of the screen.'
+expl_3 = 'When you see the letter L, please press the Q key on the keyboard, regardless of its position on the screen.'
+expl_4 = 'When you see the letter R, please press the P key on the keyboard, regardless of its position on the screen.'
+expl_5 = 'Please be as fast as possible while trying to be accurate. Get ready! With the next click the experiment starts. '      
 
-instruct = [expl_1, expl_2, expl_3, expl_4]
+instruct = [{hello}, {expl_1}, {expl_2}, {expl_3}, {expl_4}, {expl_5}]
 
 %% ================= EXPERIMENTAL LOOP ========================
+
 % Open screen for the demo
 [window,windowRect]=Screen('OpenWindow',screenNumber,0);
-% Flip to clear
+%  Flip to clear
 Screen('Flip', window);
+HideCursor;
 %get  
 [mx, my] = RectCenter(windowRect);
-
-% Set number of trials
-no_trials = 5 %just for demo purposes
 
 % Display welcome screen ----- Wait for key press to move through
 % instructions- write this more efficiently
 
-%     display([hello ' !\n' next]);
-%     KbWait([], 2);  
-%     display([expl_1 ' !\n' next]);
-%     KbWait([], 2);
-%     display([expl_2 ' !\n' next]);
-%     KbWait([], 2);
-%     display([expl_3 ' !\n' next]);
-%     KbWait([], 2);
-%     display([expl_4 ' !\n' next]);
-
 for i = 1:length(instruct)
-    display([instruct(i) ' !\n' next]);
-    KbWait([], 2);
+    DrawFormattedText(window, [instruct{i} '\n' next], 'center','center', 255);
+    Screen('Flip', window); %flip the screen
+    KbWait([], 2);     
 end
 
-% wait 500 ms
-pause(0.5);
+% % wait 500 ms
+% pause(0.5);
+
+%preparing fixation cross
+FixCr=zeros(80,80);
+FixCr(36:45,:)=255;
+FixCr(:,36:45)=255;
+fixcross = Screen('MakeTexture',window,FixCr);
 
 for i=1:no_trials
     %Fixation Cross
     Screen('DrawTexture', window, fixcross,[],[mx-40,my-40,mx+40,my+40]); %show the fixation cross
     Screen('Flip', window); %flip the screen
-    WaitSecs(.5); %cross is showing for .5 seconds
+    WaitSecs(.5); %cross is showing for .5 seconds      
 
     Screen('TextSize', window, 150); %sets the font size
-    
-    stim = randsample(conditions_table, 1) %take random condition without replacement
+   
+    if condition_table(i) == 10 %Letter L on left
+        DrawFormattedText(window, 'L', mx-400,'center',255); %places the L
+        [StimulusOnsetTime] = Screen('Flip', window);
+        [respt, keyCode]=KbWait([], 2); 
+        congruency_1 = ('congruent');
+        congruency_2 = ('congruent_Left');
 
-    if stim == 10 %Letter L on left
-    DrawFormattedText(window, 'L', mx-400,'center',255); %places the L
-    Screen('Flip', window);
-    KbWait([], 2); %wait for the key press to continue, just for demo purposes
+        cc=KbName(keyCode); %get the name of the key pressed
+        if strcmp(cc,'q') % check if q was pressed
+            Screen('TextSize', window, 50);
+            DrawFormattedText(window, 'Correct!', 'center', 'center', 255);
+            accuracy = 1;
+        else
+            Screen('TextSize', window, 50);
+            DrawFormattedText(window, 'Incorrect!', 'center', 'center', 255);
+            accuracy = 0;
+        end
+        
+        Screen('Flip', window); %flip the screen to show feedback
+        WaitSecs(0.5); %wait
 
-    elseif stim == 11 %Letter R on left
-    DrawFormattedText(window, 'R', mx+300,'center',255); %places the R
-    Screen('Flip', window);
-    KbWait([], 2); %wait for the key press to continue, just for demo purposes
+       
 
-    elseif stim == 20 %======================ADJUST TO ACTUAL CONDITIONS
-    DrawFormattedText(window, 'L', mx-400,'center',255); %places the L
-    Screen('Flip', window);
-    KbWait([], 2); %wait for the key press to continue, just for demo purposes
+    elseif condition_table(i)==11
+        DrawFormattedText(window, 'R', mx+300,'center',255); %places the R
+        [StimulusOnsetTime] = Screen('Flip', window);
 
-    elseif stim == 21
-    DrawFormattedText(window, 'L', mx-400,'center',255); %places the L
-    Screen('Flip', window);
-    KbWait([], 2); %wait for the key press to continue, just for demo purposes
+        [respt, keyCode]=KbWait([], 2); %wait for the key press to continue
+        congruency_1 = ('congruent');
+        congruency_2 = ('congruent_Right');
+
+        cc=KbName(keyCode);
+
+        if strcmp(cc, 'p')
+            Screen('TextSize', window, 50);
+            DrawFormattedText(window, 'Correct!', 'center', 'center', 255);
+            accuracy = 1;
+        else
+            Screen('TextSize', window, 50);
+            DrawFormattedText(window, 'Incorrect!', 'center', 'center', 255);
+            accuracy = 0;
+        end
+
+        Screen('Flip', window); %flip the screen to show feedback
+        WaitSecs(0.5); %wait
+
+    elseif condition_table(i) == 20 %Letter L on Right
+        DrawFormattedText(window, 'L', mx+300,'center',255); %places the R
+        [StimulusOnsetTime] = Screen('Flip', window);
+        [respt, keyCode]=KbWait([], 2); %wait for the key press to continue
+        congruency_1 = ('incongruent');
+        congruency_2 = ('incongruent_Right');
+
+        cc=KbName(keyCode);
+
+        if strcmp(cc, 'q') %check if q was pressed
+            Screen('TextSize', window, 50);
+            DrawFormattedText(window, 'Correct!', 'center', 'center', 255);
+            accuracy = 1;
+        else
+            Screen('TextSize', window, 50);
+            DrawFormattedText(window, 'Incorrect!', 'center', 'center', 255);
+            accuracy = 0;
+        end
+
+        Screen('Flip', window); %flip the screen to show feedback
+        WaitSecs(0.5); %wait
+
+    elseif condition_table(i) == 21 %Letter R on Left
+        DrawFormattedText(window, 'R', mx-400,'center',255); %places the R
+        [StimulusOnsetTime] = Screen('Flip', window);
+        [respt, keyCode]=KbWait([], 2); %wait for the key press to continue
+        congruency_1 = ('incongruent');
+        congruency_2 = ('incongruent_Left');
+
+        cc=KbName(keyCode);
+
+        if strcmp(cc, 'p')
+            Screen('TextSize', window, 50);
+            DrawFormattedText(window, 'Correct!', 'center', 'center', 255);
+            accuracy = 1;
+        else
+            Screen('TextSize', window, 50);
+            DrawFormattedText(window, 'Incorrect!', 'center', 'center', 255);
+            accuracy = 0;
+        end
+
+        Screen('Flip', window); %flip the screen to show feedback
+        WaitSecs(0.5); % wait before new trial starts
     end
 
-    % compare keypress to actual stimulus
-    %37 is the code for the left arrow key, 39 is for the right arrow key
-    if keyCode == 37 & stim == 10|11
-    display('Correct!');
-    elseif keyCode == 39 'rightarrow' & stim == 20|21
-    display ('Correct!');
-    else display('Incorrect!');
-end
+    % calculate RT time 
+    RT = respt-StimulusOnsetTime;
+
+    % print and write into the log
+    fprintf(fileID,'%f\t%d\t%s\t%s\n', RT, accuracy, congruency_1, congruency_2);
+   
 end
 
 % Goodbye Screen
-thanks = 'Thank you for completing the experiment'
-display(thanks)
 
-end
+Screen('TextSize', window, 40); %had to put the  font size back down, so the message is visible
+thanks = 'Thank you for completing the experiment!';
+DrawFormattedText(window, thanks, 'center', 'center', 255)
+
+Screen('Flip', window); % the problem was, the screen was being flipped before the message was written,
+% the screen flip has to happen after we have the scree readdy
+
+WaitSecs(5); %lets wait 5s to close the goodbye screen, maybe change it to wait for the keypress?
+
+%end
 
 % Save Congruence code(code), Status(status), and Response time(rt) to the datafile after every trial.
 %   Congruence code: (10)L on left, (20)L on right, (11)R on right, (21)R on left
 %   Status:  (1)correct, (2)incorrect, (3)timeout.      RT: response time(ms)
 % fprintf(fileID, strcat([int2str(code), '\t', int2str(status), '\t', int2str(rt), '\n']));
-
-%% ================= PRINT/WRITE DATA LOG ========================
-
+     
 
 %% ================= CLEAN UP ========================
 
 % Close the data log
 fclose(fileID);
+sca;
 % I moved sca; command to below the analysis section...move back if we don't need screen active to display analysis results?
 
 % %% =================== ANALYSIS ==================================
@@ -319,9 +283,10 @@ fclose(fileID);
 % disp(' ');
 % disp('Press space bar to exit');
 % 
-% sca;
+%sca;
 
-% catch me 
+%catch me 
+
 
     
                                                     
