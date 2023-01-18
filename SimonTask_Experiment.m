@@ -1,4 +1,5 @@
-%    __________  _______  _  __  _________   ______ __
+function results = SimonTask_Experiment(participantID)
+% __________  _______  _  __  _________   ______ __
 %   / __/  _/  |/  / __ \/ |/ / /_  __/ _ | / __/ //_/
 %  _\ \_/ // /|_/ / /_/ /    /   / / / __ |_\ \/ ,<   
 % /___/___/_/  /_/\____/_/|_/   /_/ /_/ |_/___/_/|_|  
@@ -9,15 +10,15 @@
 
 % Clear the workspace
 close all;
-clear all;
+%clear all;
 sca;
 
 % Prevent Screen Issues with PTB
-Screen('Preference', 'SkipSyncTests', 1)
+Screen('Preference', 'SkipSyncTests', 1);
 
 %% ================= BASIC EXPERIMENTAL PARAMETERS ========================
 % Participant ID - change it for everyone and use 0 for tests
-participantID = 1;
+%participantID = 1;
 
 %number of trials
 no_trials = 10; % 135 trials 
@@ -73,17 +74,17 @@ screenNumber = max(Screen('Screens'));
 
 %% ================= PREPARE WELCOME SCREEN AND INSTRUCTIONS ========================
 % Welcome Screen Text
-hello = 'Hello, welcome to the experiment!'
-next = 'Please press any key on the keyboard to continue.'
+hello = 'Hello, welcome to the experiment!';
+next = 'Please press any key on the keyboard to continue.';
 
 % Explanation Screen Text
-expl_1 = 'In the following experiment, you will be shown a fixation cross followed by either the letter L or the letter R.'
-expl_2 = 'The letter will be shown either on the left or the right side of the screen.'
-expl_3 = 'When you see the letter L, please press the Q key on the keyboard, regardless of its position on the screen.'
-expl_4 = 'When you see the letter R, please press the P key on the keyboard, regardless of its position on the screen.'
-expl_5 = 'Please be as fast as possible while trying to be accurate. Get ready! With the next click the experiment starts. '      
+expl_1 = 'In the following experiment, you will be shown a fixation cross followed by either the letter L or the letter R.';
+expl_2 = 'The letter will be shown either on the left or the right side of the screen.';
+expl_3 = 'When you see the letter L, please press the Q key on the keyboard, regardless of its position on the screen.';
+expl_4 = 'When you see the letter R, please press the P key on the keyboard, regardless of its position on the screen.';
+expl_5 = 'Please be as fast as possible while trying to be accurate. Get ready! With the next click the experiment starts. ';      
 
-instruct = [{hello}, {expl_1}, {expl_2}, {expl_3}, {expl_4}, {expl_5}]
+instruct = [{hello}, {expl_1}, {expl_2}, {expl_3}, {expl_4}, {expl_5}];
 
 %% ================= EXPERIMENTAL LOOP ========================
 
@@ -247,7 +248,7 @@ end
 
 Screen('TextSize', window, 40); %had to put the  font size back down, so the message is visible
 thanks = 'Thank you for completing the experiment!';
-DrawFormattedText(window, thanks, 'center', 'center', 255)
+DrawFormattedText(window, thanks, 'center', 'center', 255);
 
 Screen('Flip', window); % the problem was, the screen was being flipped before the message was written,
 % the screen flip has to happen after we have the scree readdy
@@ -260,48 +261,7 @@ WaitSecs(5); %lets wait 5s to close the goodbye screen, maybe change it to wait 
 % Close the data log
 fclose(fileID);
 sca;
-% I moved sca; command to below the analysis section...move back if we don't need screen active to display analysis results?
 
-% %% =================== ANALYSIS ==================================
-% % Read the trial data file into a Matrix because can't do analysis directly on the txt file. Then create the following boolean filter vectors: 
-% %   correct, congruent, incongruent, response times.  These are used to filter against eachother as necessary using & | operators to get only the
-% %   needed elements for analysis functions sum() and mean().
-% % Example Data analysis array for reference (single trial): [11 1 674]  where 11 is (congruence code) 1 is (Status) 674 is 
-% %   (response time), the outputs from a single dummy trial
-% % See above code within 'Experimental Loop' section for explanation of Congruence Codes, and Status codes.
-% data = readmatrix(strcat('SimonTask_','P', num2str(participantID), '.txt'), 'w');    % read trial data from txt file into data array 
-% correct = data(:,2)== 1;        % create boolean vector of correct trials (used for filtering array rows for analysis)
-% n = size(data,1);			    % number of trials is number of rows, hence size of column 1
-% congruent = data(:,1) <20;   % boolean vector of congruent trials (used for filtering array rows for analysis)
-% incongruent = data(:,1) >=20; % boolean vector of incongruent trials
-% response_times = data(:,3);     % extract response times column from matrix, as a vector.  Better to filter directly on matrix, but couldn't find method to do this in Matlab.
-% 
-% disp('Average response speed (Correct trials only):');
-% % Apparently you can't just put a constructed string directly into Display expression like in Python, so here's a pointless array X to make it work, 
-% % repeated for each display statement below.  ...Welcome to update if anyone knows how to put it directly into a display() expression :)
-% % Calculate mean of ('congruent' and 'correct') trials, using boolean vectors created above
-% X = ['  Congruent trials:   ',num2str(mean(response_times([congruent & correct]))),'(ms)'];
-% disp(X);
-% % Calculate mean of ('incongruent' and 'correct') trials, using boolean vectors created above
-% X = ['  Incongruent trials: ',num2str(mean(response_times([incongruent & correct]))),'(ms)'];
-% disp(X);
-% disp(' ')   % Just inserts a blank line
-% % Calculate error rate for congruent trial responses only
-% X = ['Error Rate (congruent trials):   ', num2str(sum(congruent & ~correct)/n*100),'%'];
-% disp(X);
-% % Calculate error rate for incongruent trial responses only
-% X = ['Error Rate (incongruent trials)  ', num2str(sum(incongruent & ~correct)/n*100),'%'];
-% disp(X);
-% disp(' ')
-% % Calculate Simon Effect as (average response time for Incongruent trials) - (average response time for Congruent trials) 
-% X = ['Simon Effect:  ',num2str(mean(response_times([incongruent & correct])) - mean(response_times([congruent & correct]))),'(ms)'];
-% disp(X);
-% disp(' ');
-% disp('Press space bar to exit');
-% 
-%sca;
-
-%catch me 
 
 
     
