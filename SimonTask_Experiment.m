@@ -1,5 +1,5 @@
 function results = SimonTask_Experiment(participantID)
-% __________  _______  _  __  _________   ______ __
+%    __________  _______  _  __  _________   ______ __
 %   / __/  _/  |/  / __ \/ |/ / /_  __/ _ | / __/ //_/
 %  _\ \_/ // /|_/ / /_/ /    /   / / / __ |_\ \/ ,<   
 % /___/___/_/  /_/\____/_/|_/   /_/ /_/ |_/___/_/|_|  
@@ -11,19 +11,20 @@ function results = SimonTask_Experiment(participantID)
 % Clear the workspace
 close all;
 %clear all;
+%
 sca;
 
 % Prevent Screen Issues with PTB
 Screen('Preference', 'SkipSyncTests', 1);
-
+      
 %% ================= BASIC EXPERIMENTAL PARAMETERS ========================
-% Participant ID - change it for everyone and use 0 for tests
+% Participant ID - chang      
 %participantID = 1;
 
 %number of trials
-no_trials = 10; % 135 trials 
+no_trials = 135; % 135 trials 
 
-%% ================= RANDOMIZATION AND TIMELINE ========================
+%% ================== RANDOMIZATION AND TIMELINE =========================
 % We said that it is 50/50 Congruent and Incongruent and then within Incongruency there is 50/50 of left and right
 % we can also change it here by giving different percentages; the numbers
 % of stimuli are rounded to integers, so all combinations of number of
@@ -91,15 +92,14 @@ instruct = [{hello}, {expl_1}, {expl_2}, {expl_3}, {expl_4}, {expl_5}];
 % Open screen for the demo
 [window,windowRect]=Screen('OpenWindow',screenNumber,0);
 
-%dummy calls
+% dummy calls
 
 WaitSecs(.1);
 GetSecs;
 
 %  Flip to clear
 Screen('Flip', window);
-HideCursor;
-%get  
+HideCursor;  
 [mx, my] = RectCenter(windowRect);
 
 % Display welcome screen ----- Wait for key press to move through
